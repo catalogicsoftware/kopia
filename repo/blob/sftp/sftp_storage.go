@@ -19,9 +19,9 @@ import (
 	"golang.org/x/crypto/ssh/knownhosts"
 
 	"github.com/kopia/kopia/internal/connection"
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/iocopy"
 	"github.com/kopia/kopia/internal/ospath"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/blob"
 	"github.com/kopia/kopia/repo/blob/retrying"
 	"github.com/kopia/kopia/repo/blob/sharded"

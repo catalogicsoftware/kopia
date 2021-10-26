@@ -13,7 +13,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/content"
 )
 

@@ -6,9 +6,9 @@ import (
 
 	atunits "github.com/alecthomas/units"
 
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/timetrack"
 	"github.com/kopia/kopia/internal/units"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/content"
 	"github.com/kopia/kopia/repo/encryption"
 	"github.com/kopia/kopia/repo/hashing"

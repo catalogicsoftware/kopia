@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/kopia/kopia/public/gather"
 )
 
 // ErrSetTimeUnsupported is returned by implementations of Storage that don't support SetTime.

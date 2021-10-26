@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/mockfs"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo"
 	"github.com/kopia/kopia/repo/content"
 	"github.com/kopia/kopia/snapshot"

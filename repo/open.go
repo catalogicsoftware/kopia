@@ -12,7 +12,7 @@ import (
 	"github.com/kopia/kopia/internal/atomicfile"
 	"github.com/kopia/kopia/internal/cache"
 	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/blob"
 	loggingwrapper "github.com/kopia/kopia/repo/blob/logging"
 	"github.com/kopia/kopia/repo/blob/readonly"

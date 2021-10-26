@@ -14,8 +14,8 @@ import (
 	"go.uber.org/zap/zapcore"
 
 	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/zaplogutil"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/blob"
 )
 

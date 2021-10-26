@@ -16,10 +16,10 @@ import (
 	"github.com/pkg/errors"
 	"github.com/studio-b12/gowebdav"
 
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/iocopy"
 	"github.com/kopia/kopia/internal/retry"
 	"github.com/kopia/kopia/internal/tlsutil"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/blob"
 	"github.com/kopia/kopia/repo/blob/retrying"
 	"github.com/kopia/kopia/repo/blob/sharded"

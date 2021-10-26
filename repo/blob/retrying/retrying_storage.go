@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/retry"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo/blob"
 )
 

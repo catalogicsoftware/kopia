@@ -17,8 +17,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/grpcapi"
+	"github.com/kopia/kopia/public/gather"
 	"github.com/kopia/kopia/repo"
 	"github.com/kopia/kopia/repo/compression"
 	"github.com/kopia/kopia/repo/content"
