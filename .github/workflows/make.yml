@@ -108,14 +108,14 @@ jobs:
       run: make -j2 ci-integration-tests
       continue-on-error: ${{ github.event_name != 'pull_request' }}
     - name: Upload Logs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: logs
         path: .logs/**/*.log
         if-no-files-found: ignore
       if: ${{ always() }}
     - name: Upload Kopia Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: kopia
         path: |
@@ -137,7 +137,7 @@ jobs:
         if-no-files-found: ignore
       if: ${{ !contains(matrix.os, 'self-hosted') }}
     - name: Upload Kopia Binary
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: kopia_binaries
         path: |
