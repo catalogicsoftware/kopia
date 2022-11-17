@@ -24,8 +24,8 @@ const (
 type azStorage struct {
 	Options
 
-	service azblob.ServiceClient
-	bucket  azblob.ContainerClient
+	service *azblob.ServiceClient
+	bucket  *azblob.ContainerClient
 }
 
 func (az *azStorage) GetBlob(ctx context.Context, b blob.ID, offset, length int64, output blob.OutputBuffer) error {
@@ -33,8 +33,11 @@ func (az *azStorage) GetBlob(ctx context.Context, b blob.ID, offset, length int6
 		return errors.Wrap(blob.ErrInvalidRange, "invalid offset")
 	}
 
-	bc := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
-	opt := &azblob.DownloadBlobOptions{}
+	bc, err := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	if err != nil {
+		return translateError(err)
+	}
+	opt := &azblob.BlobDownloadOptions{}
 
 	if length > 0 {
 		opt.Offset = &offset
@@ -68,9 +71,12 @@ func (az *azStorage) GetBlob(ctx context.Context, b blob.ID, offset, length int6
 }
 
 func (az *azStorage) GetMetadata(ctx context.Context, b blob.ID) (blob.Metadata, error) {
-	bc := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	bc, err := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	if err != nil {
+		return blob.Metadata{}, errors.Wrap(translateError(err), "Failed to create new Block Blob Client")
+	}
 
-	fi, err := bc.GetProperties(ctx, &azblob.GetBlobPropertiesOptions{})
+	fi, err := bc.GetProperties(ctx, &azblob.BlobGetPropertiesOptions{})
 	if err != nil {
 		return blob.Metadata{}, errors.Wrap(translateError(err), "Attributes")
 	}
@@ -119,9 +125,12 @@ func (az *azStorage) PutBlob(ctx context.Context, b blob.ID, data blob.Bytes, op
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	bc := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	bc, err := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	if err != nil {
+		return translateError(err)
+	}
 
-	ubo := &azblob.UploadBlockBlobOptions{
+	ubo := &azblob.BlockBlobUploadOptions{
 		Metadata: timestampmeta.ToMap(opts.SetModTime, timeMapKey),
 	}
 
@@ -139,7 +148,11 @@ func (az *azStorage) PutBlob(ctx context.Context, b blob.ID, data blob.Bytes, op
 
 // DeleteBlob deletes azure blob from container with given ID.
 func (az *azStorage) DeleteBlob(ctx context.Context, b blob.ID) error {
-	_, err := az.bucket.NewBlockBlobClient(az.getObjectNameString(b)).Delete(ctx, nil)
+	bc, err := az.bucket.NewBlockBlobClient(az.getObjectNameString(b))
+	if err != nil {
+		return translateError(err)
+	}
+	_, err = bc.Delete(ctx, nil)
 	err = translateError(err)
 
 	// don't return error if blob is already deleted
@@ -158,7 +171,7 @@ func (az *azStorage) getObjectNameString(b blob.ID) string {
 func (az *azStorage) ListBlobs(ctx context.Context, prefix blob.ID, callback func(blob.Metadata) error) error {
 	prefixStr := az.Prefix + string(prefix)
 
-	pager := az.bucket.ListBlobsFlat(&azblob.ContainerListBlobFlatSegmentOptions{
+	pager := az.bucket.ListBlobsFlat(&azblob.ContainerListBlobsFlatOptions{
 		Prefix: &prefixStr,
 		Include: []azblob.ListBlobsIncludeItem{
 			"[" + azblob.ListBlobsIncludeItemMetadata + "]",
@@ -228,7 +241,7 @@ func New(ctx context.Context, opt *Options) (blob.Storage, error) {
 	}
 
 	var (
-		service    azblob.ServiceClient
+		service    *azblob.ServiceClient
 		serviceErr error
 	)
 
@@ -263,7 +276,10 @@ func New(ctx context.Context, opt *Options) (blob.Storage, error) {
 		return nil, errors.Wrap(serviceErr, "opening azure service")
 	}
 
-	bucket := service.NewContainerClient(opt.Container)
+	bucket, serviceErr := service.NewContainerClient(opt.Container)
+	if serviceErr != nil {
+		return nil, errors.Wrap(serviceErr, "opening container service")
+	}
 
 	raw := &azStorage{
 		Options: *opt,
