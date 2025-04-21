@@ -50,7 +50,7 @@ require (
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/stretchr/testify v1.10.0
 	github.com/studio-b12/gowebdav v0.10.0
-	github.com/tg123/go-htpasswd v1.2.3
+	github.com/tg123/go-htpasswd v1.2.4
 	github.com/zalando/go-keyring v0.2.6
 	github.com/zeebo/blake3 v0.2.4
 	go.opentelemetry.io/otel v1.35.0
@@ -59,15 +59,15 @@ require (
 	go.opentelemetry.io/otel/trace v1.35.0
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.36.0
+	golang.org/x/crypto v0.37.0
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	golang.org/x/mod v0.24.0
 	golang.org/x/net v0.38.0
 	golang.org/x/oauth2 v0.28.0
-	golang.org/x/sync v0.12.0
-	golang.org/x/sys v0.31.0
-	golang.org/x/term v0.30.0
-	golang.org/x/text v0.23.0
+	golang.org/x/sync v0.13.0
+	golang.org/x/sys v0.32.0
+	golang.org/x/term v0.31.0
+	golang.org/x/text v0.24.0
 	google.golang.org/api v0.228.0
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.6
