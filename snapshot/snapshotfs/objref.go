@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/kopia/kopia/fs"
+	"github.com/kopia/kopia/fs/virtualfs"
 	"github.com/kopia/kopia/repo"
 	"github.com/kopia/kopia/repo/manifest"
 	"github.com/kopia/kopia/repo/object"
@@ -189,7 +190,12 @@ func FilesystemDirectoryFromIDWithPath(ctx context.Context, rep repo.Repository,
 		return dir, nil
 	}
 
-	return nil, errors.Errorf("%v is not a directory object", rootID)
+	// if entry is a file, simulate a directory with a single file entry
+	if file, ok := e.(fs.File); ok {
+		return virtualfs.NewStaticDirectory("root", []fs.Entry{file}), nil
+	}
+
+	return nil, errors.Errorf("%v is not a directory or a file object", rootID)
 }
 
 func consistentSnapshotMetadata(m1, m2 *snapshot.Manifest) bool {
