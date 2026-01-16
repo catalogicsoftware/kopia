@@ -440,6 +440,7 @@ func metadataCacheSizeSweepSettings(caching *CachingOptions) cache.SweepSettings
 func indexBlobCacheSweepSettings(caching *CachingOptions) cache.SweepSettings {
 	return cache.SweepSettings{
 		MaxSizeBytes: caching.EffectiveMetadataCacheSizeBytes(),
+		LimitBytes:   caching.MetadataCacheSizeLimitBytes,
 		MinSweepAge:  caching.MinMetadataSweepAge.DurationOrDefault(DefaultMetadataCacheSweepAge),
 	}
 }
