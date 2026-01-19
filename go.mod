@@ -29,7 +29,7 @@ require (
 	github.com/hashicorp/cronexpr v1.1.2
 	github.com/klauspost/compress v1.18.0
 	github.com/klauspost/pgzip v1.2.6
-	github.com/klauspost/reedsolomon v1.12.4
+	github.com/klauspost/reedsolomon v1.13.0
 	github.com/kopia/htmluibuild v0.0.1-0.20250303064157-676b1b5bc735
 	github.com/kylelemons/godebug v1.1.0
 	github.com/mattn/go-colorable v0.1.14
@@ -120,7 +120,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/minio/crc64nvme v1.0.1 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
