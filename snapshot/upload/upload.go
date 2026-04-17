@@ -1296,7 +1296,7 @@ func (u *Uploader) Upload(
 
 	uploadLog(ctx).Debugw("uploading", "source", sourceInfo, "previousManifests", len(previousManifests), "parallel", parallel)
 
-	u.workerPool = workshare.NewPool[*uploadWorkItem](parallel - 1)
+	u.workerPool = workshare.NewPool[*uploadWorkItem](ctx, parallel-1)
 	defer u.workerPool.Close()
 
 	s := snapshot.Manifest{

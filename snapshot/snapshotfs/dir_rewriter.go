@@ -338,7 +338,7 @@ func NewDirRewriter(ctx context.Context, rep repo.RepositoryWriter, opts DirRewr
 	}
 
 	return &DirRewriter{
-		ws:    workshare.NewPool[*dirRewriterRequest](opts.Parallel - 1),
+		ws:    workshare.NewPool[*dirRewriterRequest](ctx, opts.Parallel-1),
 		opts:  opts,
 		rep:   rep,
 		cache: cache,
