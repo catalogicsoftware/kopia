@@ -2,6 +2,7 @@
 package workshare
 
 import (
+	"context"
 	"sync"
 	"sync/atomic"
 )
@@ -21,6 +22,7 @@ type workItem[T any] struct {
 type Pool[T any] struct {
 	activeWorkers atomic.Int32
 
+	ctx       context.Context
 	semaphore chan struct{}
 
 	work   chan workItem[T]
@@ -35,12 +37,13 @@ func (w *Pool[T]) ActiveWorkers() int {
 }
 
 // NewPool creates a worker pool that launches a given number of goroutines that can invoke shared work.
-func NewPool[T any](numWorkers int) *Pool[T] {
+func NewPool[T any](ctx context.Context, numWorkers int) *Pool[T] {
 	if numWorkers < 0 {
 		numWorkers = 0
 	}
 
 	w := &Pool[T]{
+		ctx: ctx,
 		// channel must be unbuffered so that it has exactly as many slots as there are goroutines capable of reading from it
 		// this way by pushing to the channel we can be sure that a pre-spun goroutine will pick it up soon.
 		work:      make(chan workItem[T]),
