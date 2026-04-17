@@ -193,7 +193,7 @@ func NewTreeWalker(ctx context.Context, options TreeWalkerOptions) (*TreeWalker,
 
 	return &TreeWalker{
 		options:  options,
-		wp:       workshare.NewPool[any](options.Parallelism - 1),
+		wp:       workshare.NewPool[any](ctx, options.Parallelism-1),
 		enqueued: s,
 	}, nil
 }

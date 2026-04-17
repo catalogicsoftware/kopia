@@ -1267,7 +1267,7 @@ func (u *Uploader) Upload(
 		Source: sourceInfo,
 	}
 
-	u.workerPool = workshare.NewPool[*uploadWorkItem](parallel - 1)
+	u.workerPool = workshare.NewPool[*uploadWorkItem](ctx, parallel-1)
 	defer u.workerPool.Close()
 
 	u.stats = &snapshot.Stats{}

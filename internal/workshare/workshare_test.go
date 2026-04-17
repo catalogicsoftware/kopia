@@ -1,6 +1,7 @@
 package workshare_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -119,15 +120,13 @@ func TestDisallowed_WaitAfterClose(t *testing.T) {
 }
 
 func TestDisallowed_UseAfterPoolClose(t *testing.T) {
-	w := workshare.NewPool[int](1)
+	w := workshare.NewPool[int](context.Background(), 1)
 
 	var ag workshare.AsyncGroup[int]
 
 	w.Close()
 
-	require.Panics(t, func() {
-		ag.CanShareWork(w)
-	})
+	require.False(t, ag.CanShareWork(w))
 
 	require.Panics(t, func() {
 		ag.RunAsync(w, func(c *workshare.Pool[int], request int) {
@@ -138,7 +137,7 @@ func TestDisallowed_UseAfterPoolClose(t *testing.T) {
 
 //nolint:thelper
 func testComputeTreeSum(t *testing.T, numWorkers int) {
-	w := workshare.NewPool[*computeTreeSumRequest](numWorkers)
+	w := workshare.NewPool[*computeTreeSumRequest](context.Background(), numWorkers)
 	defer w.Close()
 
 	n := buildTree(6)
@@ -151,7 +150,7 @@ func testComputeTreeSum(t *testing.T, numWorkers int) {
 var treeToWalk = buildTree(6)
 
 func BenchmarkComputeTreeSum(b *testing.B) {
-	w := workshare.NewPool[*computeTreeSumRequest](10)
+	w := workshare.NewPool[*computeTreeSumRequest](context.Background(), 10)
 	defer w.Close()
 
 	b.ResetTimer()

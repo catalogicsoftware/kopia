@@ -44,7 +44,11 @@ package workshare
 
 import (
 	"sync"
+
+	"github.com/kopia/kopia/repo/logging"
 )
+
+var log = logging.Module("workshare")
 
 // AsyncGroup launches and awaits asynchronous work through a WorkerPool.
 // It provides API designed to minimize allocations while being reasonably easy to use.
@@ -121,7 +125,8 @@ func (g *AsyncGroup[T]) CanShareWork(w *Pool[T]) bool {
 	// check pool is not closed
 	select {
 	case <-w.closed:
-		panic("invalid usage - CanShareWork() after workshare.AsyncGroup has been closed")
+		log(w.ctx).Warn("CanShareWork() is called after workshare.Pool has been closed")
+		return false
 
 	default:
 		select {
