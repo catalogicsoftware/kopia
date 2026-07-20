@@ -1,8 +1,6 @@
 module github.com/kopia/kopia
 
-go 1.23.0
-
-toolchain go1.23.8
+go 1.24
 
 require (
 	cloud.google.com/go/storage v1.51.0
@@ -35,7 +33,7 @@ require (
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
 	github.com/minio/minio-go/v7 v7.0.89
-	github.com/mocktools/go-smtp-mock/v2 v2.4.0
+	github.com/mocktools/go-smtp-mock/v2 v2.5.4
 	github.com/mxk/go-vss v1.2.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/petar/GoLLRB v0.0.0-20210522233825-ae3b015fd3e9
