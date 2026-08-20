@@ -341,6 +341,22 @@ func writeIndirectObject(w io.Writer, entries []IndirectObjectEntry) error {
 	return nil
 }
 
+const IndirectContentPrefix content.IDPrefix = indirectContentPrefix
+
+// WriteIndirectIndex writes an indirect index object and returns its object ID.
+func WriteIndirectIndex(w Writer, entries []IndirectObjectEntry) (ID, error) {
+	if err := writeIndirectObject(w, entries); err != nil {
+		return EmptyID, err
+	}
+
+	indexID, err := w.Result()
+	if err != nil {
+		return EmptyID, err
+	}
+
+	return IndirectObjectID(indexID), nil
+}
+
 // WriterOptions can be passed to Repository.NewWriter().
 type WriterOptions struct {
 	Description        string
