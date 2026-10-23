@@ -357,7 +357,7 @@ func WriteIndirectIndex(w Writer, entries []IndirectObjectEntry) (ID, error) {
 		return EmptyID, err
 	}
 
-	return IndirectObjectID(indexID), nil
+	return indirectObjectID(indexID), nil
 }
 
 // WriterOptions can be passed to Repository.NewWriter().
