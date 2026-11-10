@@ -1008,23 +1008,25 @@ func (e *Manager) getCompleteIndexSetForCommittedState(ctx context.Context, cs C
 	return result, nil
 }
 
-// MaybeCompactSingleEpoch compacts the oldest epoch that is eligible for
-// compaction if there is one.
-func (e *Manager) MaybeCompactSingleEpoch(ctx context.Context) (*maintenancestats.CompactSingleEpochStats, error) {
+// NextSingleEpochCompaction returns the epoch that MaybeCompactSingleEpoch would
+// compact next and its uncompacted index blobs, or false when no epoch is
+// eligible for compaction. It lets the size of the next compaction be known
+// before running it.
+func (e *Manager) NextSingleEpochCompaction(ctx context.Context) (int, []blob.Metadata, bool, error) {
 	cs, err := e.committedState(ctx, 0)
 	if err != nil {
-		return nil, err
+		return 0, nil, false, err
 	}
 
 	uncompacted, err := oldestUncompactedEpoch(cs)
 	if err != nil {
-		return nil, err
+		return 0, nil, false, err
 	}
 
 	if !cs.isSettledEpochNumber(uncompacted) {
 		contentlog.Log1(ctx, e.log, "there are no uncompacted epochs eligible for compaction", logparam.Int("oldestUncompactedEpoch", uncompacted))
 
-		return nil, nil
+		return 0, nil, false, nil
 	}
 
 	uncompactedBlobs, ok := cs.UncompactedEpochSets[uncompacted]
@@ -1032,10 +1034,21 @@ func (e *Manager) MaybeCompactSingleEpoch(ctx context.Context) (*maintenancestat
 		// blobs for this epoch were not loaded in the current snapshot, get the list of blobs for this epoch
 		ue, err := blob.ListAllBlobs(ctx, e.st, UncompactedEpochBlobPrefix(uncompacted))
 		if err != nil {
-			return nil, errors.Wrapf(err, "error listing uncompacted indexes for epoch %v", uncompacted)
+			return 0, nil, false, errors.Wrapf(err, "error listing uncompacted indexes for epoch %v", uncompacted)
 		}
 
 		uncompactedBlobs = ue
+	}
+
+	return uncompacted, uncompactedBlobs, true, nil
+}
+
+// MaybeCompactSingleEpoch compacts the oldest epoch that is eligible for
+// compaction if there is one.
+func (e *Manager) MaybeCompactSingleEpoch(ctx context.Context) (*maintenancestats.CompactSingleEpochStats, error) {
+	uncompacted, uncompactedBlobs, ok, err := e.NextSingleEpochCompaction(ctx)
+	if err != nil || !ok {
+		return nil, err
 	}
 
 	var uncompactedSize uint64
